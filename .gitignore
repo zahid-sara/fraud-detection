@@ -1,0 +1,18 @@
+# Data files (too large for GitHub)
+data/raw/
+data/processed/*.parquet
+data/processed/*.pkl
+
+# MLflow artifacts
+mlartifacts/
+mlruns/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Large model files
+*.pkl
+*.model
