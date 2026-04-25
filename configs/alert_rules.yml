@@ -1,0 +1,40 @@
+groups:
+  - name: fraud_alerts
+    interval: 15s
+    rules:
+
+      - alert: LowFraudRecall
+        expr: model_fraud_recall < 0.70
+        for: 1m
+        labels:
+          severity: critical
+          trigger_retrain: "true"
+        annotations:
+          summary: "Recall dropped below 70%"
+          description: "Current recall {{ $value }}"
+
+      - alert: DataDriftHigh
+        expr: data_drift_score > 0.30
+        for: 1m
+        labels:
+          severity: warning
+          trigger_retrain: "true"
+        annotations:
+          summary: "Data drift exceeded threshold"
+          description: "Drift score {{ $value }}"
+
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(api_latency_seconds_bucket[5m])) > 2.0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API p95 latency > 2s"
+
+      - alert: HighErrorRate
+        expr: rate(api_errors_total[5m]) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Error rate > 5%"
